@@ -8,10 +8,12 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
+
   {
     rel: "preconnect",
     href: "https://fonts.gstatic.com",
@@ -23,6 +25,8 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+const queryClient = new QueryClient();
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -33,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <main className="mt-20 mx-auto w-[960px] pt-20">{children}</main>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -42,7 +46,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
