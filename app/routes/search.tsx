@@ -80,10 +80,10 @@ export default function Page() {
             return (
               <article
                 key={book.isbn}
-                className={`w-full flex justify-between border-b border-[#D2D6DA] items-center duration-300 ease-in-out pr-[16px] pt-[26px] ${
+                className={`relative w-full flex justify-between border-b border-[#D2D6DA] items-center duration-300 ease-in-out pr-[16px]  overflow-hidden ${
                   isOpened
-                    ? `h-[344px] pl-[54px] pb-[40px]`
-                    : "h-[100px] pl-[48px] pb-[26px]"
+                    ? `h-[344px] pl-[54px] pt-[26px] pb-[40px]`
+                    : "h-[100px] pl-[48px] pt-[16px] pb-[16px]"
                 }  `}
               >
                 <div className="flex h-full items-center">
@@ -114,7 +114,9 @@ export default function Page() {
                     }`}
                   >
                     <div
-                      className={`flex items-center ${isOpened ? "mb-4" : ""}`}
+                      className={`flex items-center ${
+                        isOpened ? "mb-4 mt-[20px]" : ""
+                      }`}
                     >
                       <span className="title3 mr-4">{book.title}</span>
                       <span className="body2 text-txt-secondary">
@@ -137,16 +139,18 @@ export default function Page() {
 
                 <div
                   className={`flex flex-col  h-full ${
-                    isOpened ? "justify-between" : "justify-center"
+                    isOpened ? "justify-end" : "justify-start"
                   }`}
                 >
                   <div
-                    className={`flex  ${
+                    className={`absolute top-0 right-[16px] bg-white flex pt-[26px] pb-[16px]  ${
                       isOpened ? "justify-end" : "items-center"
                     }`}
                   >
                     <span
-                      className={`title3 mr-14 ${isOpened ? "hidden" : ""}`}
+                      className={`title3 mr-14 w-max ${
+                        isOpened ? "hidden" : ""
+                      }`}
                     >
                       {(isOnSale
                         ? book.sale_price
@@ -154,7 +158,7 @@ export default function Page() {
                       ).toLocaleString()}
                       원
                     </span>
-                    <div className={`flex gap-2`}>
+                    <div className={`flex justify-end gap-2 w-[240px] `}>
                       <Button
                         className={`w-[116px] ${isOpened ? "hidden" : ""}`}
                         onClick={() => onClickBuy(book.url)}
