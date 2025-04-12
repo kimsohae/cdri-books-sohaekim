@@ -8,12 +8,12 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import GNB from "@/components/GNB";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
-
   {
     rel: "preconnect",
     href: "https://fonts.gstatic.com",
@@ -21,7 +21,7 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;350&display=swap",
   },
 ];
 
@@ -29,7 +29,7 @@ const queryClient = new QueryClient();
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,6 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <GNB />
         <main className="mt-20 mx-auto w-[960px] pt-20">{children}</main>
         <ScrollRestoration />
         <Scripts />
