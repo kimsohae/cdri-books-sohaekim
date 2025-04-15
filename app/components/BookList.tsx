@@ -1,30 +1,23 @@
 import { useEffect, useState } from "react";
 import { WISHLIST } from "@/lib/constants";
-import { LocalStorageUtility } from "@/lib/utils";
-import { type Book } from "@/queries/book";
+import { generateBookId, LocalStorageUtility } from "@/lib/utils";
+import { queryKeys, type Book, type BookResp } from "@/queries/book";
 import Button from "@/components/Button";
 import ArrowIcon from "@/components/icon/ArrowIcon";
 import LikeIcon from "@/components/icon/LikeIcon";
-
-/**
- * Book ID 생성
- *
- * API 결과 데이터에 책 고유값이 없으므로 isbn과 title을 조합하여 사용
- * @param book
- * @returns Book ID
- */
-const generateBookId = ({ isbn, title }: Book) => `${isbn}-${title}`;
+import type { PageType } from "@/components/PageLayout";
+import { useUpdateWishlist } from "@/lib/hooks";
 
 interface Props {
   bookList: Book[];
+  type: PageType;
 }
-export default function BookList({ bookList }: Props) {
-  const bookList2 =
-    typeof window !== "undefined"
-      ? LocalStorageUtility.getItem<Book[]>(WISHLIST, [])
-      : [];
+export default function BookList({ bookList, type }: Props) {
+  const { removeWishList } = useUpdateWishlist();
   const [openedCardId, setOpenedCardId] = useState<string>("");
-  const [wishSet, setWishSet] = useState<Set<string>>(new Set<string>());
+  const [wishBookIds, setWishBookIds] = useState<Set<string>>(
+    new Set<string>()
+  );
 
   /**
    * 상세보기 클릭 시, 아코디언 확장
@@ -53,7 +46,7 @@ export default function BookList({ bookList }: Props) {
   const onClickWish = (book: Book) => {
     const wishList = LocalStorageUtility.getItem<Book[]>(WISHLIST, []);
     const bookId = generateBookId(book);
-    const isWished = wishSet.has(bookId);
+    const isWished = wishBookIds.has(bookId);
 
     // [1. 로컬스토리지 업데이트]
     // 찜한 책이면      wishList에서 찜한 책을 제거
@@ -62,15 +55,21 @@ export default function BookList({ bookList }: Props) {
       ? wishList.filter((item: Book) => !(generateBookId(item) === bookId))
       : [book, ...wishList];
     LocalStorageUtility.setItem(WISHLIST, updatedList);
+    // [2. queryData 업데이트]
+    // wishlist 페이지에서만 적용
+    // react-query에서 관리하는 Data 상태를 업데이트한다.
+    if (type === "wishlist") {
+      removeWishList(bookId);
+    }
 
-    // [2. 찜한 책 판별용 Set 업데이트]
-    const newSet = new Set(wishSet);
+    // [3. 찜한 책 판별용 Set 업데이트]
+    const newSet = new Set(wishBookIds);
     if (isWished) {
       newSet.delete(bookId);
     } else {
       newSet.add(bookId);
     }
-    setWishSet(newSet);
+    setWishBookIds(newSet);
   };
 
   useEffect(() => {
@@ -78,7 +77,7 @@ export default function BookList({ bookList }: Props) {
     // 자료구조를 Array에서 Set으로 변환 (bookId를 값으로 가지는 Set 생성)
     const wishList = LocalStorageUtility.getItem<Book[]>(WISHLIST, []);
     const newSet = new Set(wishList.map((item: Book) => generateBookId(item)));
-    setWishSet(newSet);
+    setWishBookIds(newSet);
   }, []);
 
   return (
@@ -96,13 +95,13 @@ export default function BookList({ bookList }: Props) {
         const isOpened = openedCardId === bookId;
         const isOnSale = book.sale_price >= 0;
         const replacedContent = contents.replace("  ", "\n\n");
-        const isWished = wishSet.has(bookId);
+        const isWished = wishBookIds.has(bookId);
         const finalPrice = (isOnSale ? sale_price : price).toLocaleString();
 
         return (
           <article
             key={bookId}
-            className={`relative w-full flex justify-between border-b border-ghostGray items-center duration-300 ease-in-out pr-[16px] overflow-hidden ${
+            className={`relative w-full flex justify-between border-b border-ghostGray items-center animate-default pr-[16px] overflow-hidden ${
               isOpened
                 ? `h-[344px] pl-[54px] pt-[26px] pb-[40px]`
                 : "h-[100px] pl-[48px] pt-[16px] pb-[16px]"
@@ -110,25 +109,26 @@ export default function BookList({ bookList }: Props) {
           >
             <div className="flex h-full items-center">
               <div
-                className={`relative flex-shrink-0 duration-300 ease-in-out ${
+                className={`relative flex-shrink-0 animate-default ${
                   isOpened
                     ? "mr-8 w-[210px] h-[280px]"
                     : "mr-12 w-[48px] h-[68px]"
                 }`}
               >
                 <img
-                  src={thumbnail || "/unfound.png"}
+                  src={thumbnail || "/unfound.webp"}
                   alt={bookId}
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
                 <LikeIcon
                   role={"button"}
                   onClick={() => onClickWish(book)}
                   fill={"#eeeee"}
-                  className={`absolute duration-300 ease-in-out cursor-pointer ${
+                  className={`absolute animate-default cursor-pointer ${
                     isOpened
                       ? "top-[8px] right-[8px] w-[24px]"
-                      : "top-[0px] right-[0px] w-[12px]"
+                      : "text-white top-[0px] right-[0px] w-[12px]"
                   }`}
                   type={isWished ? "fill" : "stroke"}
                 />
@@ -144,8 +144,8 @@ export default function BookList({ bookList }: Props) {
                     isOpened ? "mb-4 mt-[20px]" : ""
                   }`}
                 >
-                  <span className="title3 mr-4">{title}</span>
-                  <span className="body2 text-txt-secondary whitespace-nowrap">
+                  <div className="title3 mr-4">{title}</div>
+                  <span className="body2 text-txt-secondary whitespace-pre-line">
                     {authors.join(", ")}
                   </span>
                 </div>
@@ -186,16 +186,12 @@ export default function BookList({ bookList }: Props) {
                     }}
                   >
                     <span className="mr-[5px]">상세보기</span>
-                    <ArrowIcon
-                      className={`duration-300 ease-in-out ${
-                        isOpened ? "rotate-180" : ""
-                      }`}
-                    />
+                    <ArrowIcon className={`${isOpened ? "rotate-180" : ""}`} />
                   </Button>
                 </div>
               </div>
               <div className={`${isOpened ? "" : "hidden"}`}>
-                <div className="grid mb-[28px] items-center grid-cols-[1fr_auto] gap-[4px]">
+                <div className="grid mb-[28px] mr-[4px] items-center grid-cols-[1fr_auto] gap-[4px] ">
                   <span className="text-right small text-txt-subtitle">
                     원가
                   </span>

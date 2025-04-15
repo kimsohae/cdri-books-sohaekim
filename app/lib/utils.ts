@@ -1,3 +1,4 @@
+import type { Book } from "@/queries/book";
 
 /* localStorage 관리 */
 export class LocalStorageUtility {
@@ -21,3 +22,15 @@ export class LocalStorageUtility {
       return jsonValue? JSON.parse(jsonValue): defaultValue
     }
   }
+
+
+/**
+ * Book ID 생성
+ *
+ * API 결과 데이터에 책 고유값이 없으므로 isbn과 title, author를 조합하여 사용
+ * @param book
+ * @returns Book ID
+ */
+export const generateBookId = ({ isbn, title, authors }: Book) => {
+  return `${isbn}-${title}-${authors.toString()}`;
+};

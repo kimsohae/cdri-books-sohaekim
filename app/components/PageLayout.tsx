@@ -7,7 +7,7 @@ import DetailSearch from "@/components/search/DeatilSearch";
 import Search from "@/components/search/Search";
 import Spacing from "@/components/Spacing";
 
-type PageType = "search" | "wishlist";
+export type PageType = "search" | "wishlist";
 type PageText = {
   title: string;
   caption: string;
@@ -39,10 +39,10 @@ interface Props {
     onSearchDetail: (value: DetailedQuery) => void;
   };
 }
+
 /**
  * search, wishlist 페이지 공통 레이아웃
  */
-
 export default function PageLayout({
   totalCount,
   books,
@@ -70,7 +70,7 @@ export default function PageLayout({
         </>
       )}
       <Spacing h={24} />
-      <div className="caption ">
+      <div className="caption">
         <span className="mr-4">{pageText.caption}</span>
         <span>
           총{" "}
@@ -88,7 +88,7 @@ export default function PageLayout({
               <NoData message={pageText.emptyMessage} />
             ) : (
               <>
-                <BookList bookList={books} />
+                <BookList bookList={books} type={type} />
                 <BottomObserver
                   observeCondition={hasNextPage}
                   onObserve={fetchNextPage}

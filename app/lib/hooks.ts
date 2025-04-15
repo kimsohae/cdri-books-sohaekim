@@ -1,4 +1,7 @@
 
+import { generateBookId } from '@/lib/utils';
+import { queryKeys, type Book, type BookResp } from '@/queries/book';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, type RefObject } from 'react';
 
 
@@ -30,4 +33,45 @@ export const useClickOutside = <T extends HTMLDivElement>(
   }, [ref, handler]);
 };
 
+/**
+ * QueryClient wishlist 데이터 업데이트
+ * wishlist 페이지에서만 사용중
+ */
+export const useUpdateWishlist = () => {
+  const queryClient = useQueryClient();
+  const removeWishList = (bookId:string)=>{
+    queryClient.setQueryData(queryKeys.wishList, (old: {pages: BookResp[]})=> {
+      const updatedPages = old.pages.map((el) => {
+        return {
+          ...el,
+          meta: {
+            ...el.meta,
+            total_count: el.meta.total_count - 1,
+          },
+          documents: el.documents.filter(
+            (item) => generateBookId(item) !== bookId
+          ),
+        };
+      });
+      return { ...old, pages: updatedPages };
+    })
+  }
 
+  const addWishList = (book:Book)=>{
+    queryClient.setQueryData(queryKeys.wishList, (old: {pages: BookResp[]})=> {
+      const updatedPages = old.pages.map((el, idx) => {
+        return {
+          ...el,
+          meta: {
+            ...el.meta,
+            total_count: el.meta.total_count + 1,
+          },
+          documents: idx === 0 ? [book, ...el.documents]: el.documents,
+        };
+      });
+      return { ...old, pages: updatedPages };
+    })
+  }
+
+  return {removeWishList, addWishList}
+}
