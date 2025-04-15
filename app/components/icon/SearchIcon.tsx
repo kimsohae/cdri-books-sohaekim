@@ -1,4 +1,5 @@
 import { type SVGProps } from "react";
+import { twMerge } from "tailwind-merge";
 
 export default function SearchIcon({
   className,
@@ -10,7 +11,7 @@ export default function SearchIcon({
       height="30"
       viewBox="0 0 30 30"
       fill="none"
-      className={`text-txt-primary ${className}`}
+      className={twMerge("text-txt-primary", className)}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
