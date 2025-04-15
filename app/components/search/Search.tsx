@@ -63,6 +63,8 @@ export default function Search({ handleSearch, placeholder }: Props) {
     if (searchWord !== "" && searchWord && key === "Enter") {
       handleSearch(searchWord);
       saveSearchHistory(searchWord);
+    } else if (isHistoryShown && key === "Escape") {
+      setIsHistoryShown(false);
     }
   };
 
@@ -135,7 +137,7 @@ export default function Search({ handleSearch, placeholder }: Props) {
               className="relative w-full py-[12px] flex items-center"
             >
               <button
-                className="w-full ml-[52px] mr-[50px] text-left whitespace-nowrap overflow-x-hidden"
+                className={`w-full ml-[52px] mr-[50px] text-left whitespace-nowrap overflow-x-hidden focus:outline-none focus:text-txt-primary `}
                 onClick={() => onClickHistory(item)}
               >
                 {item}
