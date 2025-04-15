@@ -141,7 +141,7 @@ export default function DetailSearch({
           {/* <div className=""> */}
           <input
             data-input="detail"
-            className="focus:outline-none cpation w-[208px] border-b border-primary body2 text-[#8D94A0] p-[4px]"
+            className="focus:outline-none w-[208px] border-b border-primary body2 text-txt-subtitle p-[4px]"
             ref={searchValueRef}
             placeholder={placeholder}
           />
