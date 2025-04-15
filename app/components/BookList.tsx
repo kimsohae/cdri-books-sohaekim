@@ -117,7 +117,7 @@ export default function BookList({ bookList }: Props) {
                 }`}
               >
                 <img
-                  src={thumbnail}
+                  src={thumbnail || "/unfound.png"}
                   alt={bookId}
                   className="w-full h-full object-cover"
                 />
