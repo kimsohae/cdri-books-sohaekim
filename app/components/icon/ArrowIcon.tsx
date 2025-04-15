@@ -12,7 +12,7 @@ export default function ArrowIcon({
       viewBox="0 0 14 8"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={twMerge("text-[#B1B8C0]", className)}
+      className={twMerge("text-[#B1B8C0] animate-default", className)}
       {...props}
     >
       <path
