@@ -1,21 +1,6 @@
 import PageLayout from "@/components/PageLayout";
-import { WISHLIST } from "@/lib/constants";
-import { LocalStorageUtility } from "@/lib/utils";
-import {
-  getPagenatedWishlist,
-  queryKeys,
-  type Book,
-  type BookResp,
-} from "@/queries/book";
+import { getPagenatedWishlist, queryKeys, type BookResp } from "@/queries/book";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import type { Route } from "./+types/home";
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "CERTICOS BOOKS" },
-    { name: "description", content: "CERTICOS BOOKS" },
-  ];
-}
 
 export default function Page() {
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({

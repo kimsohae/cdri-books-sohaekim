@@ -2,7 +2,6 @@ import { useState } from "react";
 import { type BookResp, getBookList, queryKeys } from "@/queries/book";
 import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import PageLayout from "@/components/PageLayout";
-import type { Route } from "./+types/home";
 
 export type DetailedQuery = {
   target: string;
@@ -13,13 +12,6 @@ const INITIAL_DETAILED_QUERY: DetailedQuery = {
   target: "",
   query: "",
 };
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "CERTICOS BOOKS" },
-    { name: "description", content: "CERTICOS BOOKS" },
-  ];
-}
 
 export default function Page() {
   const [query, setQuery] = useState<string>();

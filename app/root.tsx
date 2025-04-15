@@ -25,6 +25,13 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "CERTICOS BOOKS" },
+    { name: "description", content: "CERTICOS BOOKS" },
+  ];
+}
+
 const queryClient = new QueryClient();
 
 export function Layout({ children }: { children: React.ReactNode }) {
