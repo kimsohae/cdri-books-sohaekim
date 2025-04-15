@@ -38,7 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <GNB />
-        <main className="mt-20 mx-auto w-[960px] pt-20">{children}</main>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>

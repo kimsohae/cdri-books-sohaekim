@@ -39,6 +39,9 @@ interface Props {
     onSearchDetail: (value: DetailedQuery) => void;
   };
 }
+/**
+ * search, wishlist 페이지 공통 레이아웃
+ */
 
 export default function PageLayout({
   totalCount,
@@ -49,7 +52,7 @@ export default function PageLayout({
 }: Props) {
   const pageText = messageMap[type];
   return (
-    <>
+    <main className="mt-20 mx-auto w-[960px] pt-20 px-4">
       <h2 className="title2">{pageText.title}</h2>
       {search && (
         <>
@@ -96,6 +99,6 @@ export default function PageLayout({
         )}
       </section>
       <Spacing h={36} />
-    </>
+    </main>
   );
 }
