@@ -2,7 +2,6 @@ import { Config } from "@/lib/config";
 import { PAGE_SIZE, WISHLIST } from "@/lib/constants";
 import { LocalStorageUtility } from "@/lib/utils";
 
-const BASE_URL = "https://dapi.kakao.com/v3/search/book";
 
 export const queryKeys = {
     search: (searchParam:BookParam) => ['search', searchParam],
@@ -31,7 +30,7 @@ export interface BookResp {
     documents: Book[];
     meta: {
         is_end: boolean;
-        pageable_COUNT: number;
+        pageable_count: number;
         total_count: number;
     };
     nextPage?: number;
@@ -52,14 +51,14 @@ export const getBookList = async ({
         params.set("target", target);
     }
 
-    const response = await fetch(`${BASE_URL}?${params.toString()}`, {
+    const response = await fetch(`${Config.API_BASE_URL}?${params.toString()}`, {
         method: "GET",
         headers: {
             Authorization: `KakaoAK ${Config.API_KEY}`,
         },
     });
     const data = await response.json();
-
+    
     // Infinite Query 페이징용: is_end가 아닌 경우, nextPage 생성
     if (!data.meta.is_end) {
         data.nextPage = page + 1;
@@ -86,7 +85,7 @@ export const getBookList = async ({
       documents: pagenatedData,
       meta: {
         is_end,
-        pageable_COUNT: Math.floor(totalCount / size),
+        pageable_count: Math.floor(totalCount / size),
         total_count: totalCount
       }
     }
