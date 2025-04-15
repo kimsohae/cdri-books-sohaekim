@@ -5,6 +5,14 @@ interface Props extends SVGProps<SVGSVGElement> {
   type?: "fill" | "stroke";
 }
 
+/**
+ * type이 fill인 경우 채워진 하트, stroke인 경우 빈 하트
+ * - fill 타입 하트 색상은 app.css 에서 --color-red로 변경 가능
+ * - stroke 타입 하트 색상은 className에서 text 컬러로 변경 가능
+ * @param className
+ * @param type
+ * @returns
+ */
 export default function LikeIcon({
   className,
   type = "stroke",
@@ -16,7 +24,7 @@ export default function LikeIcon({
       height="20"
       viewBox="0 0 22 20"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${twMerge("text-gray", className)}`}
+      className={`${twMerge("text-white", className)}`}
       {...props}
     >
       {type === "stroke" && (

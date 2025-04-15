@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
+import { useUpdateWishlist } from "@/lib/hooks";
 import { WISHLIST } from "@/lib/constants";
 import { generateBookId, LocalStorageUtility } from "@/lib/utils";
-import { queryKeys, type Book, type BookResp } from "@/queries/book";
 import Button from "@/components/Button";
 import ArrowIcon from "@/components/icon/ArrowIcon";
 import LikeIcon from "@/components/icon/LikeIcon";
+import { type Book } from "@/queries/book";
 import type { PageType } from "@/components/PageLayout";
-import { useUpdateWishlist } from "@/lib/hooks";
 
 interface Props {
   bookList: Book[];
@@ -55,6 +55,7 @@ export default function BookList({ bookList, type }: Props) {
       ? wishList.filter((item: Book) => !(generateBookId(item) === bookId))
       : [book, ...wishList];
     LocalStorageUtility.setItem(WISHLIST, updatedList);
+
     // [2. queryData 업데이트]
     // wishlist 페이지에서만 적용
     // react-query에서 관리하는 Data 상태를 업데이트한다.
@@ -88,7 +89,7 @@ export default function BookList({ bookList, type }: Props) {
         // bookId   => book 키값
         // isOpened => 아코디언 확장 여부
         // isOnSale => 할인 여부. sale_price가 0 이상이면 할인 중으로 판단
-        // replacedContnet => 소개글 줄바꿈 처리
+        // replacedContent => 소개글 줄바꿈 처리
         // isWished => 찜한 책 판별
         // finalPrice => 할인여부 적용 후 가격
         const bookId = generateBookId(book);
@@ -124,11 +125,10 @@ export default function BookList({ bookList, type }: Props) {
                 <LikeIcon
                   role={"button"}
                   onClick={() => onClickWish(book)}
-                  fill={"#eeeee"}
                   className={`absolute animate-default cursor-pointer ${
                     isOpened
                       ? "top-[8px] right-[8px] w-[24px]"
-                      : "text-white top-[0px] right-[0px] w-[12px]"
+                      : "top-[0px] right-[0px] w-[12px]"
                   }`}
                   type={isWished ? "fill" : "stroke"}
                 />
