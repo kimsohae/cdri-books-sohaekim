@@ -28,7 +28,7 @@ export default function BottomObserver({ onObserve, observeCondition }: Props) {
           onObserve();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: "100px" }
     );
 
     if (observerRef && bottomRef.current) {
@@ -46,5 +46,5 @@ export default function BottomObserver({ onObserve, observeCondition }: Props) {
     };
   }, [observeCondition]);
 
-  return <div className="absolute bottom-0 w-full h-[100px]" ref={bottomRef} />;
+  return <div className="absolute bottom-0 w-full h-[10px]" ref={bottomRef} />;
 }
