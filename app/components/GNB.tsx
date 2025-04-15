@@ -18,7 +18,7 @@ export default function GNB() {
   const { pathname } = useLocation();
 
   return (
-    <header className="fixed top-0 h-20 flex bg-[#fffff] w-full items-center px-40 bg-white z-[10]">
+    <header className="fixed top-0 h-20 flex bg-[#fffff] w-full items-center bg-white z-[10] px-4 md:px-40 ">
       <span className="title1">
         <Link to="/">CERTICOS BOOKS</Link>
       </span>
