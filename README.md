@@ -49,7 +49,6 @@ React.js, TypeScript, React Query, TailwindCSS를 활용한 도서 검색 웹 �
 │   │   ├── constants.ts              // 프로젝트 전역에 사용될 상수 정의
 │   │   ├── hooks.ts                  // 커스텀 훅 정의
 │   │   └── utils.ts                  // 유틸 함수 정의
-│   ├── queries                       // 데이터 fetching(API호출, LocalStorage 사용) 로직 정리
 │   ├── root.tsx                      // 공통 레이아웃, 메타/링크, 에러 바운더리, React Query 설정
 │   ├── routes
 │   │   ├── search.tsx                // 검색 페이지
