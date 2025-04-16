@@ -41,6 +41,9 @@ export const useGetWishlistInifinite = () => {
     },
     queryKey: queryKeys.wishList,
     queryFn: ({ pageParam }) => getPagenatedWishlist(pageParam),
+    throwOnError: (err) => {
+        throw new Error(err.message);
+      },
   });
 
   const books = data?.pages.flatMap((page) => page.documents);
@@ -52,6 +55,12 @@ export const useGetWishlistInifinite = () => {
 /**
  * QueryClient wishlist 데이터 업데이트
  * wishlist 페이지에서만 사용중
+ * 
+ * 기존에는 setQueryData를 활용해 데이터 업데이트했으나 
+ * fetchNextPage 실행 시 페이지네이션이 부정확한 이슈가 있어 
+ * invalidateQueries로 변경.
+ * setQueryData를 사용하려면
+ * fetchNextPage 시 현재 데이터셋의 마지막 인덱스를 파라미터로 받아 다음 페이지를 받아오는 것으로 수정 필요
  */
 export const useUpdateWishlist = () => {
   const queryClient = useQueryClient();

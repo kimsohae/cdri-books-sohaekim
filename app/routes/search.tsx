@@ -1,21 +1,16 @@
 import { useState } from "react";
-import { type BookResp, getBookList, queryKeys } from "@/queries/book";
-import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import PageLayout from "@/components/PageLayout";
+import { useSearchBooksInifinite } from "@/features/book/hooks";
+import type { BookParam } from "@/features/book/types";
 
-export type DetailedQuery = {
-  target: string;
-  query: string;
-};
-
-const INITIAL_DETAILED_QUERY: DetailedQuery = {
+const INITIAL_DETAILED_QUERY: BookParam = {
   target: "",
   query: "",
 };
 
 export default function Page() {
-  const [query, setQuery] = useState<string>();
-  const [detailedQuery, setDetailedQuery] = useState<DetailedQuery>(
+  const [query, setQuery] = useState<string>("");
+  const [detailedQuery, setDetailedQuery] = useState<BookParam>(
     INITIAL_DETAILED_QUERY
   );
 
@@ -24,21 +19,8 @@ export default function Page() {
     target: detailedQuery?.target,
   };
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    initialPageParam: 1,
-    getNextPageParam: (lastPage: BookResp) => {
-      return lastPage.nextPage;
-    },
-    queryKey: queryKeys.search(searchParam),
-    queryFn: ({ pageParam }) =>
-      getBookList({ ...searchParam, page: pageParam }),
-    enabled: !!(query || detailedQuery.query),
-    placeholderData: keepPreviousData,
-  });
-
-  const books = data?.pages.flatMap((page) => page.documents) || [];
-  const totalCount = data?.pages[0].meta.total_count;
-
+  const { data, fetchNextPage, hasNextPage } =
+    useSearchBooksInifinite(searchParam);
   /** 검색 : detailed query 초기화 */
   const onSearch = (value: string) => {
     setDetailedQuery(INITIAL_DETAILED_QUERY);
@@ -46,7 +28,7 @@ export default function Page() {
   };
 
   /** 상세 검색 : query 초기화 */
-  const onSearchDetail = (value: DetailedQuery) => {
+  const onSearchDetail = (value: BookParam) => {
     setQuery("");
     setDetailedQuery(value);
   };
@@ -54,8 +36,8 @@ export default function Page() {
   return (
     <PageLayout
       type="search"
-      books={books}
-      totalCount={totalCount}
+      books={data.books}
+      totalCount={data.totalCount}
       search={{ onSearch, onSearchDetail }}
       pagination={{ hasNextPage, fetchNextPage }}
     />
