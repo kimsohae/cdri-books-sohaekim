@@ -1,3 +1,4 @@
+import type { Book } from "@/features/book/types";
 
 /* localStorage 관리 */
 export class LocalStorageUtility {
