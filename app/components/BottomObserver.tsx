@@ -11,7 +11,7 @@ interface Props {
  * 뷰포트 안에 bottomRef가 참조한 div가 감지될 경우 onObserve를 실행한다.
  * 만약 observeCondition이 false라면 감지를 중단한다.
  * @param onObserve          observe 시 실행할 함수
- * @param observeCondition   observe 지속 여부()
+ * @param observeCondition   observe 지속 여부
  */
 export default function BottomObserver({ onObserve, observeCondition }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);

@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
+import { useClickOutside } from "@/lib/hooks";
 import Button from "@/components/Button";
 import CancelIcon from "@/components/icon/CancelIcon";
 import Spacing from "@/components/Spacing";
-import { useClickOutside } from "@/lib/hooks";
-import ArrowIcon from "../icon/ArrowIcon";
+import ArrowIcon from "@/components/icon/ArrowIcon";
 
 const SEARCH_OPTIONS: Option[] = [
   {
@@ -52,7 +52,7 @@ export default function DetailSearch({
 
   /**
    * 검색 버튼 ClickEventHandler
-   * @description searchValueRef 값을 읽고, 값이 있는 경우 target과 함께 검색
+   * @description searchValueRef 값을 읽고, 값이 있는 경우 option.value와 함께 검색
    */
   const onClickSearch = () => {
     const serchWord = searchValueRef.current?.value;
@@ -114,7 +114,11 @@ export default function DetailSearch({
             >
               <span>{option.label || placeholder}</span>
 
-              <ArrowIcon className="w-[10px] h-[10px] " />
+              <ArrowIcon
+                className={`w-[10px] h-[10px] ${
+                  isOptionOpened ? "rotate-180" : ""
+                }`}
+              />
             </button>
             {isOptionOpened && (
               <div className="absolute bottom-[-64px] w-[100px] flex flex-col absolute  body2 text-txt-subtitle bg-white shadow-sm ">
