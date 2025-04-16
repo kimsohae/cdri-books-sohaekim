@@ -1,41 +1,13 @@
+import type { Book, BookParam, BookResp } from "@/features/book/types";
 import { Config } from "@/lib/config";
 import { PAGE_SIZE, WISHLIST } from "@/lib/constants";
 import { LocalStorageUtility } from "@/lib/utils";
 
-
-export const queryKeys = {
-    search: (searchParam:BookParam) => ['search', searchParam],
-    wishList: ['wishList']
-}
-
-export type ApiBookTarget = "title" | "isbn" | "publisher" | "person";
-export interface BookParam {
-    query: string;
-    page?: number;
-    target?: string;
-}
-
-export interface Book {
-    title: string;
-    contents: string;
-    url: string;
-    isbn: string;
-    authors: string[];
-    price: number;
-    sale_price: number;
-    thumbnail: string;
-}
-
-export interface BookResp {
-    documents: Book[];
-    meta: {
-        is_end: boolean;
-        pageable_count: number;
-        total_count: number;
-    };
-    nextPage?: number;
-}
-
+/**
+ * 
+ * @param param0 
+ * @returns BookResp
+ */
 export const getBookList = async ({
     query,
     target,
@@ -69,8 +41,9 @@ export const getBookList = async ({
 
 
 /** 
- *  전체 데이터의 n번째 페이지 반환 
- *  getBookList 반환값과 타입 공통화 역할 
+ *  Localstorage에서 wishlist 반환
+ *  getBookList 반환값과 타입 공통화 
+ *  @returns BookResp
  */
  export const getPagenatedWishlist= (page =1, size=PAGE_SIZE):BookResp=> {
     const wishList = LocalStorageUtility.getItem<Book[]>(WISHLIST, []);
@@ -89,7 +62,8 @@ export const getBookList = async ({
         total_count: totalCount
       }
     }
-  
+    
+    // Infinite Query 페이징용: is_end가 아닌 경우, nextPage 생성
     if(!is_end) {
       data.nextPage = page + 1;
     }

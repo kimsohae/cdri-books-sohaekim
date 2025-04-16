@@ -1,11 +1,10 @@
-import { type Book } from "@/queries/book";
-import { type DetailedQuery } from "@/routes/search";
 import BookList from "@/components/BookList";
 import BottomObserver from "@/components/BottomObserver";
 import NoData from "@/components/NoData";
 import DetailSearch from "@/components/search/DeatilSearch";
 import Search from "@/components/search/Search";
 import Spacing from "@/components/Spacing";
+import type { Book, BookParam } from "@/features/book/types";
 
 export type PageType = "search" | "wishlist";
 type PageText = {
@@ -36,7 +35,7 @@ interface Props {
   };
   search?: {
     onSearch: (value: string) => void;
-    onSearchDetail: (value: DetailedQuery) => void;
+    onSearchDetail: (value: BookParam) => void;
   };
 }
 

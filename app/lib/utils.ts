@@ -1,4 +1,3 @@
-import type { Book } from "@/queries/book";
 
 /* localStorage 관리 */
 export class LocalStorageUtility {
