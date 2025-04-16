@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { useUpdateWishlist } from "@/lib/hooks";
 import { WISHLIST } from "@/lib/constants";
 import { generateBookId, LocalStorageUtility } from "@/lib/utils";
 import Button from "@/components/Button";
 import ArrowIcon from "@/components/icon/ArrowIcon";
 import LikeIcon from "@/components/icon/LikeIcon";
-import { type Book } from "@/queries/book";
 import type { PageType } from "@/components/PageLayout";
+import { useUpdateWishlist } from "@/features/book/hooks";
+import type { Book } from "@/features/book/types";
 
 interface Props {
   bookList: Book[];
   type: PageType;
 }
 export default function BookList({ bookList, type }: Props) {
-  const { removeWishList } = useUpdateWishlist();
+  const { toggleWishlist } = useUpdateWishlist();
   const [openedCardId, setOpenedCardId] = useState<string>("");
   const [wishBookIds, setWishBookIds] = useState<Set<string>>(
     new Set<string>()
@@ -58,9 +58,9 @@ export default function BookList({ bookList, type }: Props) {
 
     // [2. queryData 업데이트]
     // wishlist 페이지에서만 적용
-    // react-query에서 관리하는 Data 상태를 업데이트한다.
+    // react-query invalidate
     if (type === "wishlist") {
-      removeWishList(bookId);
+      toggleWishlist();
     }
 
     // [3. 찜한 책 판별용 Set 업데이트]
@@ -128,7 +128,7 @@ export default function BookList({ bookList, type }: Props) {
                   className={`absolute animate-default cursor-pointer ${
                     isOpened
                       ? "top-[8px] right-[8px] w-[24px]"
-                      : "top-[0px] right-[0px] w-[12px]"
+                      : "top-[-3px] right-[1px] w-[12px]"
                   }`}
                   type={isWished ? "fill" : "stroke"}
                 />
