@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useSearchBooksInifinite } from "@/features/book/hooks";
 import { useClickOutside } from "@/lib/hooks";
 import Button from "@/components/Button";
 import CancelIcon from "@/components/icon/CancelIcon";
@@ -27,7 +28,6 @@ export type Option = {
 
 interface Props {
   options?: Option[];
-  handleSearch: (searchOption: { target: string; query: string }) => void;
   placeholder: string;
 }
 
@@ -41,9 +41,9 @@ interface Props {
  */
 export default function DetailSearch({
   options = SEARCH_OPTIONS,
-  handleSearch,
   placeholder,
 }: Props) {
+  const { setBookParam } = useSearchBooksInifinite();
   const searchValueRef = useRef<HTMLInputElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const [option, setOption] = useState<Option>(options[0]);
@@ -61,7 +61,7 @@ export default function DetailSearch({
         target: option.value,
         query: serchWord,
       };
-      handleSearch(searchOption);
+      setBookParam(searchOption);
     }
   };
 

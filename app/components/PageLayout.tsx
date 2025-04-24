@@ -46,25 +46,19 @@ export default function PageLayout({
   totalCount,
   books,
   type,
-  search,
   pagination: { hasNextPage, fetchNextPage },
 }: Props) {
   const pageText = messageMap[type];
+
   return (
     <main className="mt-20 mx-auto w-[960px] pt-20 px-4">
       <h2 className="title2">{pageText.title}</h2>
-      {search && (
+      {type === "search" && (
         <>
           <Spacing h={28} />
           <div className="flex items-center gap-4">
-            <Search
-              handleSearch={search.onSearch}
-              placeholder="검색어를 입력하세요"
-            />
-            <DetailSearch
-              handleSearch={search.onSearchDetail}
-              placeholder="검색어 입력"
-            />
+            <Search placeholder="검색어를 입력하세요" />
+            <DetailSearch placeholder="검색어 입력" />
           </div>
         </>
       )}

@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { INITIAL_DETAILED_QUERY } from "@/contexts/BookParamContext";
+import { useSearchBooksInifinite } from "@/features/book/hooks";
 import { LocalStorageUtility } from "@/lib/utils";
 import { SEARCH_HISTORY } from "@/lib/constants";
 import { useClickOutside } from "@/lib/hooks";
@@ -26,11 +28,11 @@ const getUpdatedHistory = (
 };
 
 interface Props {
-  handleSearch: (value: string) => void;
   placeholder: string;
 }
 
-export default function Search({ handleSearch, placeholder }: Props) {
+export default function Search({ placeholder }: Props) {
+  const { setBookParam } = useSearchBooksInifinite();
   const searchValueRef = useRef<HTMLInputElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
   const [history, setHistory] = useState<string[]>(
@@ -61,7 +63,7 @@ export default function Search({ handleSearch, placeholder }: Props) {
     const { key } = e;
     // 엔터 시 검색 실행
     if (searchWord !== "" && searchWord && key === "Enter") {
-      handleSearch(searchWord);
+      setBookParam({ query: searchWord });
       saveSearchHistory(searchWord);
     } else if (isHistoryShown && key === "Escape") {
       setIsHistoryShown(false);
@@ -92,7 +94,7 @@ export default function Search({ handleSearch, placeholder }: Props) {
    * @param historyWord
    */
   const onClickHistory = (historyWord: string) => {
-    handleSearch(historyWord);
+    setBookParam({ query: historyWord });
     saveSearchHistory(historyWord);
   };
 
@@ -111,6 +113,12 @@ export default function Search({ handleSearch, placeholder }: Props) {
   useClickOutside(historyRef, () => {
     setIsHistoryShown(false);
   });
+
+  useEffect(() => {
+    return () => {
+      setBookParam(INITIAL_DETAILED_QUERY);
+    };
+  }, []);
 
   return (
     <div

@@ -8,8 +8,9 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import GNB from "@/components/GNB";
+import { BookParamProvider } from "@/contexts/BookParamContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import GNB from "@/components/GNB";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -56,7 +57,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <BookParamProvider>
+        <Outlet />
+      </BookParamProvider>
     </QueryClientProvider>
   );
 }

@@ -31,8 +31,3 @@ export interface BookResp {
 }
 
 
-
-export const queryKeys = {
-    search: (searchParam:BookParam) => ['search', searchParam],
-    wishList: ['wishList']
-}

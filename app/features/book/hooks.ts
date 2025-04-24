@@ -1,6 +1,6 @@
+import { useBookParam } from "@/contexts/BookParamContext";
 import { getBookList, getPagenatedWishlist } from "@/features/book/api";
 import {
-  queryKeys,
   type BookParam,
   type BookResp,
 } from "@/features/book/types";
@@ -10,16 +10,24 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-export const useSearchBooksInifinite = (searchParam: BookParam) => {
+
+const queryKeys = {
+  search: (searchParam:BookParam) => ['search', searchParam],
+  wishList: ['wishList']
+}
+
+
+export const useSearchBooksInifinite = () => {
+  const { bookParam, setBookParam } = useBookParam();
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
     initialPageParam: 1,
     getNextPageParam: (lastPage: BookResp) => {
       return lastPage.nextPage;
     },
-    queryKey: queryKeys.search(searchParam),
+    queryKey: queryKeys.search(bookParam),
     queryFn: ({ pageParam }) =>
-      getBookList({ ...searchParam, page: pageParam }),
-    enabled: !!searchParam.query,
+      getBookList({ ...bookParam, page: pageParam }),
+    enabled: !!bookParam.query,
     placeholderData: keepPreviousData,
 
     throwOnError: (err) => {
@@ -27,10 +35,11 @@ export const useSearchBooksInifinite = (searchParam: BookParam) => {
     },
   });
 
+
   const books = data?.pages.flatMap((page) => page.documents) || [];
   const totalCount = data?.pages[0].meta.total_count;
 
-  return { data: { books, totalCount }, fetchNextPage, hasNextPage };
+  return { data: {books, totalCount}, fetchNextPage, hasNextPage, setBookParam};
 };
 
 export const useGetWishlistInifinite = () => {

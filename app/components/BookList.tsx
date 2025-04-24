@@ -87,17 +87,17 @@ export default function BookList({ bookList, type }: Props) {
         const { title, contents, price, sale_price, thumbnail, authors, url } =
           book;
         // bookId   => book 키값
+        // isWished => 찜한 책 판별
         // isOpened => 아코디언 확장 여부
         // isOnSale => 할인 여부. sale_price가 0 이상이면 할인 중으로 판단
         // replacedContent => 소개글 줄바꿈 처리
-        // isWished => 찜한 책 판별
         // finalPrice => 할인여부 적용 후 가격
         const bookId = generateBookId(book);
+        const isWished = wishBookIds.has(bookId);
         const isOpened = openedCardId === bookId;
         const isOnSale = book.sale_price >= 0;
-        const replacedContent = contents.replace("  ", "\n\n");
-        const isWished = wishBookIds.has(bookId);
         const finalPrice = (isOnSale ? sale_price : price).toLocaleString();
+        const replacedContent = contents.replace("  ", "\n\n");
 
         return (
           <article
