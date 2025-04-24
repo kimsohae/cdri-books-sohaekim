@@ -1,5 +1,7 @@
 ## 1. 프로젝트 개요
 
+본 프로젝트는 채용 과제로 진행하였으며, Public Repository에 업로드하도록 요청받았습니다. 전형 이후, 개인 레파지토리 관리 목적에 따라 레파지토리 이름을 변경하였습니다.
+
 React.js, TypeScript, React Query, TailwindCSS를 활용한 도서 검색 웹 애플리케이션입니다. 카카오 도서 API를 통해 검색 기능을 제공하며, 관심 도서를 찜 목록에 저장할 수 있는 기능을 포함합니다.
 
 ## 2. 환경설정 및 실행 방법
@@ -83,6 +85,8 @@ React.js, TypeScript, React Query, TailwindCSS를 활용한 도서 검색 웹 �
   - 도서 리스트를 렌더링하며, 로컬스토리지에 저장된 찜한 도서 목록을 `Set`로 변환 후 찜한 도서 여부를 확인합니다(Array.includes(id) 대신 Set.has(id)를 사용하여 연산 비용을 줄임).
 
 ## 4. 라이브러리 선택 이유
+
+프로젝트에서 요구한 필수 기술 스택인 React, Typescript, React Query 외에는 별도의 상태 관리나 UI 라이브러리를 사용하지 않고 최소한의 의존성만 가지고 개발하는 것을 목표로 하였습니다.
 
 - **React router + Vite**
 
